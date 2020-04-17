@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">VK Training Client</string>
+    <string name="fragment_news">fragment_news</string>
+</resources>
