@@ -10,3 +10,11 @@ fun String.getParameter(paramName: String) : String? {
 
     return if (paramValue.isNotEmpty()) paramValue else null
 }
+
+fun concatString(vararg values: String?): String {
+    var res = ""
+    values.forEach {
+        it?.let { res += it}
+    }
+    return res
+}

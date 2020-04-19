@@ -2,12 +2,12 @@ package ru.leonov.vktrainingclient.mvp.presenter
 
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.leonov.vktrainingclient.mvp.utils.getParameter
+import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.view.AuthView
 import ru.leonov.vktrainingclient.secretdata.VkProgramId
 
 @InjectViewState
-class AuthPresenter: MvpPresenter<AuthView>() {
+class AuthPresenter : MvpPresenter<AuthView>() {
 
     private val accessTokenParamName = "access_token"
     private val userIdParamName = "id"
@@ -15,7 +15,7 @@ class AuthPresenter: MvpPresenter<AuthView>() {
 
     private val id = VkProgramId
     private val scope = "friends,photos,wall"
-    private val redirect_uri = "https://oauth.vk.com/blank.html"
+    private val redirectUri = "https://oauth.vk.com/blank.html"
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -27,14 +27,14 @@ class AuthPresenter: MvpPresenter<AuthView>() {
         val url = "https://oauth.vk.com/authorize?" +
                 "client_id=${id}&" +
                 "display=page&" +
-                "redirect_uri=${redirect_uri}&" +
+                "redirect_uri=${redirectUri}&" +
                 "scope=${scope}&" +
                 "response_type=token&" +
                 "v=5.103"
         viewState.login(url)
     }
 
-    private fun onUserAuthorized(token: String, userId: Int ) {
+    private fun onUserAuthorized(token: String, userId: Int) {
         viewState.goToNextActivity(token, userId)
     }
 
@@ -42,21 +42,30 @@ class AuthPresenter: MvpPresenter<AuthView>() {
         viewState.showError(error)
     }
 
-    fun onAuthResponse(url: String) {
-        if (url.contains(redirect_uri)) {
-            val token = url.getParameter(accessTokenParamName)
-            val userId = url.getParameter(userIdParamName)
+//    fun onAuthResponse(url: String) {
+//        if (url.contains(redirect_uri)) {
+//            val token = url.getParameter(accessTokenParamName)
+//            val userId = url.getParameter(userIdParamName)
+//
+//            token?.let {
+//                onUserAuthorized(it, userId?.toInt() ?: 0)
+//                return
+//            }
+//
+//            val error = url.getParameter(errorParamName)
+//            error?.let {
+//                onUserAuthorizedError(it)
+//            }
+//        }
+//    }
 
-            token?.let {
-                onUserAuthorized(it, userId?.toInt() ?: 0)
-                return
-            }
-
-            val error = url.getParameter(errorParamName)
-            error?.let {
-                onUserAuthorizedError(it)
-            }
+    fun authResponse(userSession: UserSession) {
+        userSession.token?.let {
+            onUserAuthorized(it, userSession.userId?.toInt() ?: 0)
+            return
         }
+        if (userSession.error != null) onUserAuthorizedError(userSession.error)
+        else onUserAuthorizedError("Unknown error!!!")
     }
 
 }

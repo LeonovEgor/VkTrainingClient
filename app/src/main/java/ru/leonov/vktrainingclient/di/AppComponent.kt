@@ -1,16 +1,13 @@
 package ru.leonov.vktrainingclient.di
 
 import dagger.Component
-import ru.leonov.vktrainingclient.di.modules.AppModule
-import ru.leonov.vktrainingclient.di.modules.CiceroneModule
-import ru.leonov.vktrainingclient.di.modules.ImageModule
-import ru.leonov.vktrainingclient.di.modules.RepoModule
-import ru.leonov.vktrainingclient.mvp.presenter.AuthPresenter
-import ru.leonov.vktrainingclient.mvp.presenter.UserPresenter
-import ru.leonov.vktrainingclient.mvp.presenter.MainPresenter
+import ru.leonov.vktrainingclient.di.modules.*
+import ru.leonov.vktrainingclient.mvp.presenter.*
 import ru.leonov.vktrainingclient.ui.activity.MainActivity
 import ru.leonov.vktrainingclient.ui.fragments.UserFragment
-import ru.leonov.vktrainingclient.ui.splash.AuthActivity
+import ru.leonov.vktrainingclient.ui.activity.AuthActivity
+import ru.leonov.vktrainingclient.ui.fragments.FriendsFragment
+import ru.leonov.vktrainingclient.ui.fragments.PhotosFragment
 import javax.inject.Singleton
 
 @Singleton
@@ -19,7 +16,8 @@ import javax.inject.Singleton
         AppModule::class,
         RepoModule::class,
         CiceroneModule::class,
-        ImageModule::class
+        ImageModule::class,
+        AuthModule::class
 //        DataBaseModule::class
     ]
 )
@@ -30,4 +28,11 @@ interface AppComponent {
     fun inject(authPresenter: AuthPresenter)
     fun inject(userFragment: UserFragment)
     fun inject(userPresenter: UserPresenter)
+    fun inject(friendsFragment: FriendsFragment)
+    fun inject(friendsPresenter: FriendsPresenter)
+    fun inject(photosFragment: PhotosFragment)
+    fun inject(photosPresenter: PhotosPresenter)
+
+
+
 }

@@ -5,27 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread
-import kotlinx.android.synthetic.main.activity_auth.tv_status
-import kotlinx.android.synthetic.main.fragment_user.*
+import androidx.recyclerview.widget.GridLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.fragment_photos.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.geekbrains.poplib.mvp.model.image.IImageLoader
+import ru.geekbrains.poplib.ui.adapter.PhotosRVAdapter
 import ru.leonov.vktrainingclient.R
-import ru.leonov.vktrainingclient.mvp.presenter.UserPresenter
-import ru.leonov.vktrainingclient.mvp.view.UserView
+import ru.leonov.vktrainingclient.mvp.presenter.PhotosPresenter
+import ru.leonov.vktrainingclient.mvp.view.PhotosView
 import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.BackButtonListener
 import javax.inject.Inject
 
-class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
+class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
 
     companion object {
+        //TODO: Заменить на Inject
         private const val VK_TOKEN = "vktoken"
         private const val VK_USER_ID = "vkuserid"
 
-        fun newInstance(token: String, userId: Int) = UserFragment().apply {
+        fun newInstance(token: String, userId: Int) = PhotosFragment().apply {
             arguments = Bundle().apply {
                 putString(VK_TOKEN, token)
                 putInt(VK_USER_ID, userId)
@@ -34,11 +36,11 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     @InjectPresenter
-    lateinit var presenter: UserPresenter
+    lateinit var presenter: PhotosPresenter
 
     @ProvidePresenter
-    fun providePresenter() = UserPresenter(
-        mainThread(),
+    fun providePresenter() = PhotosPresenter(
+        AndroidSchedulers.mainThread(),
         arguments!![VK_TOKEN] as String,
         arguments!![VK_USER_ID] as Int).apply {
         App.instance.appComponent.inject(this)
@@ -46,6 +48,8 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     @Inject
     lateinit var imageLoader: IImageLoader<ImageView>
+
+    private var adapter: PhotosRVAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,11 +60,18 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_user, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_photos, container, false)
 
     override fun init() {
-
+        rv_photos.layoutManager = GridLayoutManager(context, 2)
+        adapter = PhotosRVAdapter(presenter.photoListPresenter, imageLoader)
+        rv_photos.adapter = adapter
     }
+
+    override fun updateList() {
+        adapter?.notifyDataSetChanged()
+    }
+
 
     override fun clearError() {
         tv_status.text = ""
@@ -70,20 +81,8 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
         tv_status.text = error
     }
 
-    override fun setUserName(userName: String) {
-        tv_name.text = userName
-    }
-
-    override fun loadPhoto(url: String) {
-        imageLoader.loadInto(url, iv_user_image)
-    }
-
-    override fun setCity(city: String) {
-        tv_city_country.text = city
-    }
-
-    override fun setBirthday(date: String) {
-        tv_bdate.text = date
+    override fun showState(state: String) {
+        tv_status.text = state
     }
 
     override fun backClicked() = presenter.backClicked()

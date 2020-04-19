@@ -3,9 +3,8 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.leonov.vktrainingclient.mvp.model.entity.NameCase
-import ru.leonov.vktrainingclient.mvp.model.entity.UserRequestData
 import ru.leonov.vktrainingclient.mvp.model.repository.UsersRepository
+import ru.leonov.vktrainingclient.mvp.utils.concatString
 import ru.leonov.vktrainingclient.mvp.view.UserView
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
@@ -19,7 +18,7 @@ class UserPresenter(
     private val userId: Int
 ) : MvpPresenter<UserView>() {
 
-    private val fields = "photo_50,country,city,bdate"
+    private val fields = "photo_200, country, city, bdate"
 
     @Inject
     lateinit var userRepo: UsersRepository
@@ -35,18 +34,18 @@ class UserPresenter(
 
     private fun loadUser() {
         viewState.clearError()
-        val userData = UserRequestData(userId, fields, NameCase.nom, token)
-        userRepo.getUser(userData)
+        userRepo.getUser(userId, fields, token)
             .observeOn(mainThreadScheduler)
             .subscribe ( { user ->
-                Timber.d(user.user?.first_name)
+                Timber.d(user.data?.first_name)
                 if (user.errorCode != 0) {
                     viewState.showError(user.errorMsg)
                 } else {
-                    user.user?.let {
+                    user.data?.let {
                         viewState.setUserName("${it.first_name} ${it.last_name}")
-                        viewState.loadPhoto(it.photo_50)
-                        viewState.setCity("${it.city}, ${it.country}")
+                        viewState.loadPhoto(it.photo_200)
+                        val cityCountry = concatString(it.city?.title, ", ", it.country?.title)
+                        viewState.setCity(cityCountry)
                         viewState.setBirthday("День рождения: ${it.bdate}")
                     }
                 }
