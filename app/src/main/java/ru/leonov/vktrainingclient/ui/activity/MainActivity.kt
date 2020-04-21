@@ -3,6 +3,7 @@ package ru.leonov.vktrainingclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -46,6 +47,19 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
 
         App.instance.appComponent.inject(this)
+
+        navigationViewInit()
+    }
+
+    private fun navigationViewInit() {
+        bottom_navigation.setOnNavigationItemSelectedListener {item ->
+            when (item.itemId) {
+                R.id.action_main -> { presenter.onHomeClick() }
+                R.id.action_friends -> { presenter.onFriendsClick() }
+                R.id.action_photos -> { presenter.onPhotosClick() }
+            }
+            return@setOnNavigationItemSelectedListener true
+        }
     }
 
     @ProvidePresenter

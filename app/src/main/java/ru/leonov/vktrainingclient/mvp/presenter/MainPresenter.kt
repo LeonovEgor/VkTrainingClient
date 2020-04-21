@@ -31,4 +31,16 @@ class MainPresenter() : MvpPresenter<MainView>() {
         this.userId = userId
     }
 
+    fun onHomeClick() {
+        router.navigateTo(Screens.UserScreen(token, userId))
+    }
+
+    fun onFriendsClick() {
+        router.navigateTo(Screens.FriendsScreen(token, userId))
+    }
+
+    fun onPhotosClick() {
+        router.navigateTo(Screens.PhotosScreen(token, userId))
+    }
+
 }

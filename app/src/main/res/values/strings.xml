@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">VK Training Client</string>
     <string name="fragment_news">fragment_news</string>
+    <string name="menu_home">home</string>
+    <string name="menu_friends">friends</string>
+    <string name="menu_photos">photos</string>
 </resources>

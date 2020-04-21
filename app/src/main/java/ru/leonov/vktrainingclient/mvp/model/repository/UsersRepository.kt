@@ -25,7 +25,7 @@ class UsersRepository(
                         val vkUser = VkUser(
                             user.id,
                             concatString(user.first_name, " ", user.last_name),
-                            user.bdate,
+                            user.bdate ?: "",
                             user.photo_200,
                             concatString(user.city?.title, ", ", user.country?.title)
                         )
