@@ -1,4 +1,4 @@
-package ru.geekbrains.poplib.navigation
+package ru.leonov.vktrainingclient.navigation
 
 import ru.leonov.vktrainingclient.ui.fragments.FriendsFragment
 import ru.leonov.vktrainingclient.ui.fragments.UserFragment

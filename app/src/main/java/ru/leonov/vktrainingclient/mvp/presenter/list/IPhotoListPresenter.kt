@@ -1,6 +1,6 @@
-package ru.geekbrains.poplib.mvp.presenter.list
+package ru.leonov.vktrainingclient.mvp.presenter.list
 
-import ru.geekbrains.poplib.mvp.view.list.IPhotosItemView
+import ru.leonov.vktrainingclient.mvp.view.list.IPhotosItemView
 
 
 interface IPhotoListPresenter {

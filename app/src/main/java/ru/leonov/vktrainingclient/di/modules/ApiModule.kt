@@ -10,8 +10,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.geekbrains.poplib.mvp.model.api.IDataSource
 import ru.leonov.vktrainingclient.BuildConfig
+import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
 import javax.inject.Named
 
 @Module

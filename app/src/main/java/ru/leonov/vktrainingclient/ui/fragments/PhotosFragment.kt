@@ -11,13 +11,13 @@ import kotlinx.android.synthetic.main.fragment_photos.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.geekbrains.poplib.mvp.model.image.IImageLoader
-import ru.geekbrains.poplib.ui.adapter.PhotosRVAdapter
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.PhotosPresenter
 import ru.leonov.vktrainingclient.mvp.view.PhotosView
 import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.BackButtonListener
+import ru.leonov.vktrainingclient.ui.adapter.PhotosRVAdapter
 import javax.inject.Inject
 
 class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {

@@ -2,16 +2,22 @@ package ru.leonov.vktrainingclient.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.geekbrains.poplib.mvp.model.api.IDataSource
+import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
+import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IFriendsCache
+import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IPhotosCache
+import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
+import ru.leonov.vktrainingclient.mvp.model.repository.FriendsRepository
 import ru.leonov.vktrainingclient.mvp.model.repository.PhotosRepository
 import ru.leonov.vktrainingclient.mvp.model.repository.UsersRepository
+import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 import javax.inject.Singleton
 
 @Module
     (
     includes = [
-//        CacheModule::class,
-        ApiModule::class
+        CacheModule::class,
+        ApiModule::class,
+        NetworkStatusModule::class
     ]
 )
 class RepoModule {
@@ -19,18 +25,30 @@ class RepoModule {
     @Singleton
     @Provides
     fun usersRepo(
-        api: IDataSource
+        api: IDataSource,
+        networkStatus: NetworkStatus,
+        cache: IUserCache
     ): UsersRepository {
-        return UsersRepository(api)
+        return UsersRepository(api, networkStatus, cache)
+    }
+
+    @Singleton
+    @Provides
+    fun friendsRepo(
+        api: IDataSource,
+        networkStatus: NetworkStatus,
+        cache: IFriendsCache
+    ): FriendsRepository {
+        return FriendsRepository(api, networkStatus, cache)
     }
 
     @Singleton
     @Provides
     fun photosRepo(
-        api: IDataSource
+        api: IDataSource,
+        networkStatus: NetworkStatus,
+        cache: IPhotosCache
     ): PhotosRepository {
-        return PhotosRepository(api)
+        return PhotosRepository(api, networkStatus, cache)
     }
-
-
 }

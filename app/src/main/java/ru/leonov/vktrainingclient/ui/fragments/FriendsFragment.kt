@@ -12,13 +12,13 @@ import kotlinx.android.synthetic.main.fragment_friends.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.geekbrains.poplib.mvp.model.image.IImageLoader
-import ru.geekbrains.poplib.ui.adapter.FriendsRVAdapter
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.FriendsPresenter
 import ru.leonov.vktrainingclient.mvp.view.FriendsView
 import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.BackButtonListener
+import ru.leonov.vktrainingclient.ui.adapter.FriendsRVAdapter
 import javax.inject.Inject
 
 class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener {

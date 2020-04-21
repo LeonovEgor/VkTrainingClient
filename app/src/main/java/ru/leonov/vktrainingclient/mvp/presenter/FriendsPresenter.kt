@@ -3,13 +3,15 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.geekbrains.poplib.mvp.presenter.list.IFriendsListPresenter
-import ru.geekbrains.poplib.mvp.view.list.IFriendItemView
-import ru.geekbrains.poplib.navigation.Screens
-import ru.leonov.vktrainingclient.mvp.model.entity.api.user.User
+import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
+import ru.leonov.vktrainingclient.mvp.model.entity.api.base.User
+import ru.leonov.vktrainingclient.mvp.model.repository.FriendsRepository
 import ru.leonov.vktrainingclient.mvp.model.repository.UsersRepository
+import ru.leonov.vktrainingclient.mvp.presenter.list.IFriendsListPresenter
 import ru.leonov.vktrainingclient.mvp.utils.concatString
 import ru.leonov.vktrainingclient.mvp.view.FriendsView
+import ru.leonov.vktrainingclient.mvp.view.list.IFriendItemView
+import ru.leonov.vktrainingclient.navigation.Screens
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -24,23 +26,22 @@ class FriendsPresenter(
     private val fields = "photo_200, country, city"
 
     @Inject
-    lateinit var userRepo: UsersRepository
+    lateinit var friendsRepo: FriendsRepository
 
     @Inject
     lateinit var router: Router
 
     class FriendsListPresenter : IFriendsListPresenter {
-        val friends = mutableListOf<User>()
+        val friends = mutableListOf<VkUser>()
         override var itemClickListener: ((IFriendItemView) -> Unit)? = null
 
         override fun getCount() = friends.size
 
         override fun bindView(view: IFriendItemView) {
             val friend = friends[view.pos]
-            view.setFio("${friend.first_name}, ${friend.last_name}")
-            val cityCountry = concatString(friend.city?.title, ", ", friend.country?.title)
-            view.setCity(cityCountry)
-            view.loadPhoto(friend.photo_200)
+            view.setFio(friend.name)
+            view.setCity(friend.cityCountry)
+            view.loadPhoto(friend.photoUrl)
         }
     }
 
@@ -54,28 +55,20 @@ class FriendsPresenter(
 
         friendsListPresenter.itemClickListener = { itemView ->
             val friend = friendsListPresenter.friends[itemView.pos]
-            router.navigateTo(Screens.UserScreen(token, friend.id))
+            router.navigateTo(Screens.UserScreen(token, friend.userId))
         }
     }
 
     private fun loadUserList() {
         viewState.clearError()
 
-        userRepo.getUserList(userId, fields, token)
+        friendsRepo.getFriendList(userId, fields, token)
             .observeOn(mainThreadScheduler)
-            .subscribe ( { responseResult ->
-                if (responseResult.errorCode != 0) {
-                    viewState.showError(responseResult.errorMsg)
-                } else {
-                    responseResult.data?.let {userListResponce->
-                        viewState.showState("Friends: ${userListResponce.count}")
-                        friendsListPresenter.friends.clear()
-                        userListResponce.items?.let { userList->
-                            friendsListPresenter.friends.addAll(userList)
-                            viewState.updateList()
-                        }
-                    }
-                }
+            .subscribe ( { friendList ->
+                    viewState.showState("Friends: ${friendList.count()}")
+                    friendsListPresenter.friends.clear()
+                    friendsListPresenter.friends.addAll(friendList)
+                    viewState.updateList()
             }, {
               viewState.showError(it.localizedMessage ?: "unknown error")
             })
@@ -85,5 +78,4 @@ class FriendsPresenter(
         router.exit()
         return true
     }
-
 }

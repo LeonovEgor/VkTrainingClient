@@ -2,8 +2,8 @@ package ru.leonov.vktrainingclient.mvp.presenter
 
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.geekbrains.poplib.navigation.Screens
 import ru.leonov.vktrainingclient.mvp.view.MainView
+import ru.leonov.vktrainingclient.navigation.Screens
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 

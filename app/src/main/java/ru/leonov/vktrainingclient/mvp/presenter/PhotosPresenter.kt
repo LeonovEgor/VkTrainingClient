@@ -3,11 +3,12 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import ru.geekbrains.poplib.mvp.presenter.list.IPhotoListPresenter
-import ru.geekbrains.poplib.mvp.view.list.IPhotosItemView
-import ru.leonov.vktrainingclient.mvp.model.entity.api.photo.PhotoList
+import ru.leonov.vktrainingclient.mvp.model.entity.VkPhoto
+import ru.leonov.vktrainingclient.mvp.model.entity.api.photo.Photo
 import ru.leonov.vktrainingclient.mvp.model.repository.PhotosRepository
+import ru.leonov.vktrainingclient.mvp.presenter.list.IPhotoListPresenter
 import ru.leonov.vktrainingclient.mvp.view.PhotosView
+import ru.leonov.vktrainingclient.mvp.view.list.IPhotosItemView
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -28,14 +29,13 @@ class PhotosPresenter(
     lateinit var router: Router
 
     class PhotoListPresenter : IPhotoListPresenter {
-        val photos = mutableListOf<PhotoList>()
+        val photos = mutableListOf<VkPhoto>()
 
         override fun getCount() = photos.size
 
         override fun bindView(view: IPhotosItemView) {
             val photo = photos[view.pos]
-            //TODO: сделать выбор фото для загрузки
-            view.loadPhoto(photo.sizes[photo.sizes.lastIndex].url)
+            view.loadPhoto(photo.photoUrl)
         }
     }
 
@@ -51,21 +51,13 @@ class PhotosPresenter(
     private fun loadPhotoList() {
         viewState.clearError()
 
-        photosRepo.getPhotosList(userId, albumId, photosCount, token)
+        photosRepo.getPhotoList(userId, albumId, photosCount, token)
             .observeOn(mainThreadScheduler)
-            .subscribe ( { responseResult ->
-                if (responseResult.errorCode != 0) {
-                    viewState.showError(responseResult.errorMsg)
-                } else {
-                    responseResult.data?.let {userListResponce->
-                        viewState.showState("Photos: ${userListResponce.count}")
+            .subscribe ( { vkPhotoList ->
+                        viewState.showState("Photos: ${vkPhotoList.count()}")
                         photoListPresenter.photos.clear()
-                        userListResponce.items?.let { photoList->
-                            photoListPresenter.photos.addAll(photoList)
+                        photoListPresenter.photos.addAll(vkPhotoList)
                             viewState.updateList()
-                        }
-                    }
-                }
             }, {
                 viewState.showError(it.localizedMessage ?: "unknown error")
             })

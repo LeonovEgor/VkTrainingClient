@@ -1,4 +1,4 @@
-package ru.geekbrains.poplib.ui.adapter
+package ru.leonov.vktrainingclient.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +7,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.friend_item.view.*
-import ru.geekbrains.poplib.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.R
-import ru.geekbrains.poplib.mvp.presenter.list.IFriendsListPresenter
-import ru.geekbrains.poplib.mvp.presenter.list.IPhotoListPresenter
-import ru.geekbrains.poplib.mvp.view.list.IFriendItemView
-import ru.geekbrains.poplib.mvp.view.list.IPhotosItemView
+import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
+import ru.leonov.vktrainingclient.mvp.presenter.list.IPhotoListPresenter
+import ru.leonov.vktrainingclient.mvp.view.list.IPhotosItemView
 
 //TODO: Заменить на дженерик
 class PhotosRVAdapter(val presenter: IPhotoListPresenter, private val imageLoader: IImageLoader<ImageView>) : RecyclerView.Adapter<PhotosRVAdapter.ViewHolder>() {

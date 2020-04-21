@@ -36,25 +36,17 @@ class UserPresenter(
         viewState.clearError()
         userRepo.getUser(userId, fields, token)
             .observeOn(mainThreadScheduler)
-            .subscribe ( { user ->
-                Timber.d(user.data?.first_name)
-                if (user.errorCode != 0) {
-                    viewState.showError(user.errorMsg)
-                } else {
-                    user.data?.let {
-                        viewState.setUserName("${it.first_name} ${it.last_name}")
-                        viewState.loadPhoto(it.photo_200)
-                        val cityCountry = concatString(it.city?.title, ", ", it.country?.title)
-                        viewState.setCity(cityCountry)
-                        viewState.setBirthday("День рождения: ${it.bdate}")
-                    }
-                }
+            .subscribe({ user ->
+                    viewState.setUserName(user.name)
+                    viewState.loadPhoto(user.photoUrl)
+                    viewState.setCity(user.cityCountry)
+                    viewState.setBirthday("День рождения: ${user.bdate}")
             }, {
-              viewState.showError(it.localizedMessage ?: "unknown error")
+                viewState.showError(it.localizedMessage ?: "unknown error")
             })
     }
 
-    fun backClicked() : Boolean {
+    fun backClicked(): Boolean {
         router.exit()
         return true
     }

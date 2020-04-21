@@ -1,4 +1,4 @@
-package ru.geekbrains.poplib.mvp.view.list
+package ru.leonov.vktrainingclient.mvp.view.list
 
 interface IFriendItemView {
     var pos: Int

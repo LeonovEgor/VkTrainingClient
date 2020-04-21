@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.geekbrains.poplib.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.UserPresenter
 import ru.leonov.vktrainingclient.mvp.view.UserView
 import ru.leonov.vktrainingclient.ui.App

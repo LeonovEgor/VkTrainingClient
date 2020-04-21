@@ -17,22 +17,24 @@ import javax.inject.Singleton
         RepoModule::class,
         CiceroneModule::class,
         ImageModule::class,
-        AuthModule::class
-//        DataBaseModule::class
+        AuthModule::class,
+        CacheModule::class,
+        NetworkStatusModule::class
     ]
 )
 interface AppComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(mainPresenter: MainPresenter)
+
     fun inject(authActivity: AuthActivity)
     fun inject(authPresenter: AuthPresenter)
+
     fun inject(userFragment: UserFragment)
     fun inject(userPresenter: UserPresenter)
+
     fun inject(friendsFragment: FriendsFragment)
     fun inject(friendsPresenter: FriendsPresenter)
+
     fun inject(photosFragment: PhotosFragment)
     fun inject(photosPresenter: PhotosPresenter)
-
-
-
 }

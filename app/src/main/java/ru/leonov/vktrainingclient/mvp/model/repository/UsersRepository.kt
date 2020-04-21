@@ -3,30 +3,37 @@ package ru.leonov.vktrainingclient.mvp.model.repository
 import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ru.geekbrains.poplib.mvp.model.api.IDataSource
-import ru.leonov.vktrainingclient.mvp.model.entity.api.user.User
-import ru.leonov.vktrainingclient.mvp.model.entity.api.user.UserListResponse
+import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
+import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
+import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
+import ru.leonov.vktrainingclient.mvp.utils.concatString
+import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 
 class UsersRepository(
-    private val api: IDataSource
-//    private val networkStatus: NetworkStatus,
-//    private val cache: IRepositoriesCache
+    private val api: IDataSource,
+    private val networkStatus: NetworkStatus,
+    private val cache: IUserCache
 ) {
-    private val VERSION = "5.103"
+    private val version = "5.103"
 
-    fun getUser(usersId: Int, fields: String, token: String): @NonNull Single<ResponseResult<User>> =
-        api.getUser(usersId, fields, token, VERSION)
-            .map {usersApi->
-                ResponseResult( usersApi.response?.first(),
-                    usersApi.error?.errorCode ?: 0,
-                    usersApi.error?.errorMsg ?: "")
+    fun getUser(usersId: Int, fields: String, token: String): @NonNull Single<VkUser> =
+        networkStatus.isOnlineSingle().flatMap { isOnline ->
+            if (isOnline) {
+                api.getUser(usersId, fields, token, version)
+                    .map { usersApi ->
+                        val user = usersApi.response[0]
+                        val vkUser = VkUser(
+                            user.id,
+                            concatString(user.first_name, " ", user.last_name),
+                            user.bdate,
+                            user.photo_200,
+                            concatString(user.city?.title, ", ", user.country?.title)
+                        )
+                        cache.insertOrReplace(vkUser)
+                        return@map vkUser
+                    }
+            } else {
+                cache.getUserById(usersId)
+            }
         }.subscribeOn(Schedulers.io())
-
-    fun getUserList(userId: Int, fields: String, token: String): @NonNull Single<ResponseResult<UserListResponse>> =
-        api.getSubscriptions( userId, fields, token, VERSION)
-            .map {userListApi->
-                ResponseResult( userListApi.response,
-                userListApi.error?.errorCode ?: 0,
-                userListApi.error?.errorMsg ?: "")
-            }.subscribeOn(Schedulers.io())
 }
