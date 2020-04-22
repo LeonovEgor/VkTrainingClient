@@ -81,6 +81,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun goToLogout() {
+        AuthActivity.start(this, true)
+        finish()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true

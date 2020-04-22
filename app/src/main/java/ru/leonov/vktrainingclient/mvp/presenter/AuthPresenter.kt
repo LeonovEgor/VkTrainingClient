@@ -3,15 +3,13 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
+import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
 import ru.leonov.vktrainingclient.mvp.view.AuthView
 import ru.leonov.vktrainingclient.secretdata.VkProgramId
+import javax.inject.Inject
 
 @InjectViewState
 class AuthPresenter : MvpPresenter<AuthView>() {
-
-    private val accessTokenParamName = "access_token"
-    private val userIdParamName = "id"
-    private val errorParamName = "error_msg"
 
     private val id = VkProgramId
     private val scope = "friends,photos,wall"
@@ -20,10 +18,10 @@ class AuthPresenter : MvpPresenter<AuthView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        login()
+        //login()
     }
 
-    private fun login() {
+    fun login() {
         val url = "https://oauth.vk.com/authorize?" +
                 "client_id=${id}&" +
                 "display=page&" +
@@ -31,7 +29,13 @@ class AuthPresenter : MvpPresenter<AuthView>() {
                 "scope=${scope}&" +
                 "response_type=token&" +
                 "v=5.103"
+
         viewState.login(url)
+    }
+
+    fun logout() {
+        viewState.logout()
+        login()
     }
 
     private fun onUserAuthorized(token: String, userId: Int) {
@@ -42,30 +46,16 @@ class AuthPresenter : MvpPresenter<AuthView>() {
         viewState.showError(error)
     }
 
-//    fun onAuthResponse(url: String) {
-//        if (url.contains(redirect_uri)) {
-//            val token = url.getParameter(accessTokenParamName)
-//            val userId = url.getParameter(userIdParamName)
-//
-//            token?.let {
-//                onUserAuthorized(it, userId?.toInt() ?: 0)
-//                return
-//            }
-//
-//            val error = url.getParameter(errorParamName)
-//            error?.let {
-//                onUserAuthorizedError(it)
-//            }
-//        }
-//    }
-
     fun authResponse(userSession: UserSession) {
         userSession.token?.let {
             onUserAuthorized(it, userSession.userId?.toInt() ?: 0)
             return
         }
-        if (userSession.error != null) onUserAuthorizedError(userSession.error)
-        else onUserAuthorizedError("Unknown error!!!")
-    }
 
+        userSession.error?.let {
+            onUserAuthorizedError(it)
+        } ?: let {
+            onUserAuthorizedError("Unknown error!!!")
+        }
+    }
 }

@@ -44,6 +44,7 @@ class MainPresenter() : MvpPresenter<MainView>() {
     }
 
     fun onLogout() {
+        viewState.goToLogout()
         //router.navigateTo(Screens.Login(null, null))
     }
 

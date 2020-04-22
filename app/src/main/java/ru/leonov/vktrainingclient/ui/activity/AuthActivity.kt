@@ -1,5 +1,7 @@
 package ru.leonov.vktrainingclient.ui.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -14,8 +16,16 @@ import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.auth.AndroidAuthRepo
 import javax.inject.Inject
 
-
 class AuthActivity : MvpAppCompatActivity(), AuthView {
+
+    companion object {
+        private const val logout_text = "logout"
+
+        fun start(context: Context, isLogout: Boolean) = Intent(context, AuthActivity::class.java).apply {
+            this.putExtra(logout_text, isLogout)
+            context.startActivity(this)
+        }
+    }
 
     @InjectPresenter
     lateinit var presenter: AuthPresenter
@@ -29,6 +39,10 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
 
         App.instance.appComponent.inject(this)
         initAuthRepo()
+
+        val isLogout = intent.getBooleanExtra(logout_text, false)
+        if (isLogout) presenter.logout()
+        else presenter.login()
     }
 
     private fun initAuthRepo() {
@@ -43,37 +57,26 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
 
 
     override fun login(url: String) {
-
         authRepo.getUserSession().observe( this, Observer{
             presenter.authResponse(it)
         })
         authRepo.login(url)
-        //web_view.loadUrl(url)
+    }
+
+    override fun logout() {
+        authRepo.logout()
     }
 
     override fun init() {
 
     }
 
-    override fun goToNextActivity(tocken: String, userId: Int) {
-        MainActivity.start(this, tocken, userId)
+    override fun goToNextActivity(token: String, userId: Int) {
+        MainActivity.start(this, token, userId)
         finish()
     }
 
     override fun showError(error: String) {
         tv_status.text = error
     }
-
-//    @SuppressLint("SetJavaScriptEnabled")
-//    override fun init() {
-//        web_view.settings.javaScriptEnabled = true
-//        val webViewClient = object : WebViewClient() {
-//
-//            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-//                presenter.onAuthResponse(url!!)
-//                return false
-//            }
-//        }
-//        web_view.webViewClient = webViewClient
-//    }
 }

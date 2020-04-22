@@ -1,6 +1,7 @@
 package ru.leonov.vktrainingclient.ui.auth
 
 import android.annotation.SuppressLint
+import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.lifecycle.LiveData
@@ -9,14 +10,15 @@ import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
 import ru.leonov.vktrainingclient.mvp.utils.getParameter
 
+
 class AndroidAuthRepo(private val redirectUri: String) : IAuthRepo {
 
     private val accessTokenParamName = "access_token"
     private val userIdParamName = "id"
     private val errorParamName = "error_msg"
 
-
     private lateinit var webView: WebView
+
     private var userSessionLiveData = MutableLiveData<UserSession>()
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -49,4 +51,13 @@ class AndroidAuthRepo(private val redirectUri: String) : IAuthRepo {
         } else null
 
     override fun getUserSession(): LiveData<UserSession> = userSessionLiveData
+
+    override fun logout() {
+        clearCookies()
+    }
+
+    private fun clearCookies() {
+        CookieManager.getInstance().removeAllCookies(null)
+        CookieManager.getInstance().flush()
+    }
 }

@@ -11,4 +11,5 @@ interface AuthView : MvpView {
     fun goToNextActivity(token: String, userId: Int)
     fun showError(error: String)
     fun login(url: String)
+    fun logout()
 }
