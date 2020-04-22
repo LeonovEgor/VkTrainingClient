@@ -1,7 +1,7 @@
 package ru.leonov.vktrainingclient.mvp.model.entity
 
-data class UserSession(
-    val token: String?,
-    val userId: String?,
-    val error: String?
-)
+class UserSession {
+    var token: String = ""
+    var userId: Int = 0
+    //var error: String? = null
+}

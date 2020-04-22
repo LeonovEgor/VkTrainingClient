@@ -9,6 +9,7 @@ import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.mvp.model.entity.IAuthCallback
 import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
 import ru.leonov.vktrainingclient.mvp.presenter.AuthPresenter
 import ru.leonov.vktrainingclient.mvp.view.AuthView
@@ -16,7 +17,7 @@ import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.auth.AndroidAuthRepo
 import javax.inject.Inject
 
-class AuthActivity : MvpAppCompatActivity(), AuthView {
+class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
 
     companion object {
         private const val logout_text = "logout"
@@ -55,12 +56,8 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
         App.instance.appComponent.inject(this)
     }
 
-
     override fun login(url: String) {
-        authRepo.getUserSession().observe( this, Observer{
-            presenter.authResponse(it)
-        })
-        authRepo.login(url)
+        authRepo.login(url, this)
     }
 
     override fun logout() {
@@ -72,11 +69,20 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
     }
 
     override fun goToNextActivity(token: String, userId: Int) {
-        MainActivity.start(this, token, userId)
+        //MainActivity.start(this, token, userId)
+        MainActivity.start(this)
         finish()
     }
 
     override fun showError(error: String) {
         tv_status.text = error
+    }
+
+    override fun onUserAuthorized(token: String, userId: Int) {
+        presenter.onUserAuthorized(token, userId)
+    }
+
+    override fun OnUserAuthorizedError(error: String) {
+        presenter.onUserAuthorizedError(error)
     }
 }

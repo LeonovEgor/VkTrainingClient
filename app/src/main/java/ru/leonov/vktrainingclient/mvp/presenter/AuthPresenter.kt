@@ -15,10 +15,12 @@ class AuthPresenter : MvpPresenter<AuthView>() {
     private val scope = "friends,photos,wall"
     private val redirectUri = "https://oauth.vk.com/blank.html"
 
+    @Inject
+    lateinit var userSession: UserSession
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        //login()
     }
 
     fun login() {
@@ -38,24 +40,15 @@ class AuthPresenter : MvpPresenter<AuthView>() {
         login()
     }
 
-    private fun onUserAuthorized(token: String, userId: Int) {
+    fun onUserAuthorized(token: String, userId: Int) {
+        userSession.token = token
+        userSession.userId = userId
         viewState.goToNextActivity(token, userId)
     }
 
-    private fun onUserAuthorizedError(error: String) {
+    fun onUserAuthorizedError(error: String) {
+        userSession.token = ""
+        userSession.userId = 0
         viewState.showError(error)
-    }
-
-    fun authResponse(userSession: UserSession) {
-        userSession.token?.let {
-            onUserAuthorized(it, userSession.userId?.toInt() ?: 0)
-            return
-        }
-
-        userSession.error?.let {
-            onUserAuthorizedError(it)
-        } ?: let {
-            onUserAuthorizedError("Unknown error!!!")
-        }
     }
 }

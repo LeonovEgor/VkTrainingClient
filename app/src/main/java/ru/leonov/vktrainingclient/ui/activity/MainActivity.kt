@@ -10,6 +10,7 @@ import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.presenter.MainPresenter
 import ru.leonov.vktrainingclient.mvp.view.MainView
 import ru.leonov.vktrainingclient.ui.App
@@ -22,12 +23,15 @@ import javax.inject.Inject
 class MainActivity : MvpAppCompatActivity(), MainView {
 
     companion object {
-        private const val VK_TOKEN = "vktoken"
-        private const val VK_USER_ID = "vkuserid"
+//        private const val VK_TOKEN = "vktoken"
+//        private const val VK_USER_ID = "vkuserid"
 
-        fun start(context: Context, token: String, userId: Int) = Intent(context, MainActivity::class.java).apply {
-            this.putExtra(VK_TOKEN, token)
-            this.putExtra(VK_USER_ID, userId)
+//        fun start(context: Context, token: String, userId: Int) = Intent(context, MainActivity::class.java).apply {
+//            this.putExtra(VK_TOKEN, token)
+//            this.putExtra(VK_USER_ID, userId)
+//            context.startActivity(this)
+//        }
+        fun start(context: Context) = Intent(context, MainActivity::class.java).apply {
             context.startActivity(this)
         }
     }
@@ -36,6 +40,9 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     lateinit var navigatorHolder: NavigatorHolder
 
     private val navigator = SupportAppNavigator(this, R.id.container)
+
+    @Inject
+    lateinit var userSession: UserSession
 
     @InjectPresenter
     lateinit var presenter: MainPresenter
@@ -49,10 +56,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val userId = intent.getIntExtra(VK_USER_ID, 0)
-        intent.getStringExtra(VK_TOKEN)?.let {
-            presenter.onTokenChanged(it, userId)
-        }
+//        val userId = intent.getIntExtra(VK_USER_ID, 0)
+//        intent.getStringExtra(VK_TOKEN)?.let {
+//            presenter.onTokenChanged(it, userId)
+//        }
 
         App.instance.appComponent.inject(this)
 
