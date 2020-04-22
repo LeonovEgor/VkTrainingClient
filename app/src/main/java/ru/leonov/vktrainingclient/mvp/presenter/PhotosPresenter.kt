@@ -3,6 +3,7 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.entity.VkPhoto
 import ru.leonov.vktrainingclient.mvp.model.entity.api.photo.Photo
 import ru.leonov.vktrainingclient.mvp.model.repository.PhotosRepository
@@ -13,11 +14,7 @@ import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @InjectViewState
-class PhotosPresenter(
-    private val mainThreadScheduler: Scheduler,
-    private val token: String,
-    private val userId: Int
-) : MvpPresenter<PhotosView>() {
+class PhotosPresenter(private val mainThreadScheduler: Scheduler) : MvpPresenter<PhotosView>() {
 
     private val albumId = "wall"
     private val photosCount = 100
@@ -27,6 +24,9 @@ class PhotosPresenter(
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var userSession: UserSession
 
     class PhotoListPresenter : IPhotoListPresenter {
         val photos = mutableListOf<VkPhoto>()
@@ -51,7 +51,7 @@ class PhotosPresenter(
     private fun loadPhotoList() {
         viewState.clearError()
 
-        photosRepo.getPhotoList(userId, albumId, photosCount, token)
+        photosRepo.getPhotoList(userSession.userId, albumId, photosCount, userSession.token)
             .observeOn(mainThreadScheduler)
             .subscribe ( { vkPhotoList ->
                         viewState.showState("Photos: ${vkPhotoList.count()}")

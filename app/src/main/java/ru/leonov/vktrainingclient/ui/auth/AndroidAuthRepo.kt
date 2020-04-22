@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import ru.leonov.vktrainingclient.mvp.model.entity.IAuthCallback
-import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
 import ru.leonov.vktrainingclient.mvp.utils.getParameter
 
@@ -20,9 +17,6 @@ class AndroidAuthRepo(private val redirectUri: String) : IAuthRepo {
 
     private lateinit var webView: WebView
     private lateinit var callback: IAuthCallback
-
-    //var userSessionLiveData = MutableLiveData<UserSession>()
-    //var errorLiveData = MutableLiveData<String>()
 
     @SuppressLint("SetJavaScriptEnabled")
     fun setWebView(webView: WebView) {
@@ -37,38 +31,33 @@ class AndroidAuthRepo(private val redirectUri: String) : IAuthRepo {
         }
     }
 
+    fun parseAuthAnswer(url: String) {
+        if (!url.contains(redirectUri)) return
+
+        url.getParameter(errorParamName)?.let {
+            callback.OnUserAuthorizedError(errorParamName)
+        } ?: let {
+            val token = url.getParameter(accessTokenParamName)
+            val userId = url.getParameter(userIdParamName)
+            if (token != null && userId != null) {
+                callback.onUserAuthorized(token, userId.toInt())
+            } else {
+                callback.OnUserAuthorizedError("Unknown error!!!")
+            }
+        }
+
+    }
+
     override fun login(url: String, callback: IAuthCallback) {
         this.callback = callback
         webView.loadUrl(url)
     }
 
-    fun parseAuthAnswer(url: String) {
-        if (url.contains(redirectUri)) {
-            url.getParameter(errorParamName)?.let {
-                callback.OnUserAuthorizedError(errorParamName)
-            } ?: let { userSession ->
-                val token = url.getParameter(accessTokenParamName)
-                val userId = url.getParameter(userIdParamName)
-                if (token != null && userId != null) {
-                    callback.onUserAuthorized(token, userId.toInt())
-                } else {
-                    callback.OnUserAuthorizedError("Unknown error!!!")
-                }
-                //userSessionLiveData.setValue()
-            }
-//            val token = url.getParameter(accessTokenParamName)
-//            val userId = url.getParameter(userIdParamName)
-//            val error = url.getParameter(errorParamName)
-//            UserSession(token, userId, error)
-        }
-    }
-
-    //override fun getUserSession(): LiveData<UserSession> = userSessionLiveData
-
     override fun logout() {
         clearCookies()
     }
 
+    // Другого способа через API нет.
     private fun clearCookies() {
         CookieManager.getInstance().removeAllCookies(null)
         CookieManager.getInstance().flush()

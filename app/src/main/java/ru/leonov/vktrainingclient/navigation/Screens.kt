@@ -7,15 +7,15 @@ import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 class Screens {
 
-    class PhotosScreen(private val token: String, private val userId: Int) : SupportAppScreen() {
-        override fun getFragment() = PhotosFragment.newInstance(token, userId)
+    class PhotosScreen() : SupportAppScreen() {
+        override fun getFragment() = PhotosFragment()
     }
 
-    class UserScreen(private val token: String, private val userId: Int) : SupportAppScreen() {
-        override fun getFragment() = UserFragment.newInstance(token, userId)
+    class UserScreen(private val userId: Int) : SupportAppScreen() {
+        override fun getFragment() = UserFragment.newInstance(userId)
     }
 
-    class FriendsScreen(private val token: String, private val userId: Int) : SupportAppScreen() {
-        override fun getFragment() = FriendsFragment.newInstance(token, userId)
+    class FriendsScreen() : SupportAppScreen() {
+        override fun getFragment() = FriendsFragment()
     }
 }

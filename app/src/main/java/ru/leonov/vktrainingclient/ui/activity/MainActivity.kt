@@ -23,14 +23,6 @@ import javax.inject.Inject
 class MainActivity : MvpAppCompatActivity(), MainView {
 
     companion object {
-//        private const val VK_TOKEN = "vktoken"
-//        private const val VK_USER_ID = "vkuserid"
-
-//        fun start(context: Context, token: String, userId: Int) = Intent(context, MainActivity::class.java).apply {
-//            this.putExtra(VK_TOKEN, token)
-//            this.putExtra(VK_USER_ID, userId)
-//            context.startActivity(this)
-//        }
         fun start(context: Context) = Intent(context, MainActivity::class.java).apply {
             context.startActivity(this)
         }
@@ -55,11 +47,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//        val userId = intent.getIntExtra(VK_USER_ID, 0)
-//        intent.getStringExtra(VK_TOKEN)?.let {
-//            presenter.onTokenChanged(it, userId)
-//        }
 
         App.instance.appComponent.inject(this)
 

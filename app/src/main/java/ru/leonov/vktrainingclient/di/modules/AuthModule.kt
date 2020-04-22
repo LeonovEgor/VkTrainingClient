@@ -12,7 +12,7 @@ import javax.inject.Singleton
 class AuthModule {
 
     @Provides
-    //@Singleton
+    @Singleton
     fun userSession(): UserSession {
         return UserSession()
     }

@@ -17,34 +17,26 @@ class MainPresenter() : MvpPresenter<MainView>() {
     @Inject
     lateinit var userSession: UserSession
 
-//    lateinit var token: String
-//    var userId: Int = 0
-
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        router.replaceScreen(Screens.UserScreen(userSession.token, userSession.userId))
+        router.replaceScreen(Screens.UserScreen(userSession.userId))
     }
 
     fun backClicked() {
         router.exit()
     }
 
-//    fun onTokenChanged(token: String, userId: Int) {
-//        this.token = token
-//        this.userId = userId
-//    }
-
     fun onHomeClick() {
-        //router.navigateTo(Screens.UserScreen(token, userId))
+        router.navigateTo(Screens.UserScreen(userSession.userId))
     }
 
     fun onFriendsClick() {
-        //router.navigateTo(Screens.FriendsScreen(token, userId))
+        router.navigateTo(Screens.FriendsScreen())
     }
 
     fun onPhotosClick() {
-        //router.navigateTo(Screens.PhotosScreen(token, userId))
+        router.navigateTo(Screens.PhotosScreen())
     }
 
     fun onLogout() {

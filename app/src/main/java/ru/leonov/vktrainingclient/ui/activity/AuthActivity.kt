@@ -69,7 +69,6 @@ class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
     }
 
     override fun goToNextActivity(token: String, userId: Int) {
-        //MainActivity.start(this, token, userId)
         MainActivity.start(this)
         finish()
     }

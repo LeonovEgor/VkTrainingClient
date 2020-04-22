@@ -14,6 +14,13 @@ class AuthPresenter : MvpPresenter<AuthView>() {
     private val id = VkProgramId
     private val scope = "friends,photos,wall"
     private val redirectUri = "https://oauth.vk.com/blank.html"
+    private val url = "https://oauth.vk.com/authorize?" +
+            "client_id=${id}&" +
+            "display=page&" +
+            "redirect_uri=${redirectUri}&" +
+            "scope=${scope}&" +
+            "response_type=token&" +
+            "v=5.103"
 
     @Inject
     lateinit var userSession: UserSession
@@ -24,14 +31,6 @@ class AuthPresenter : MvpPresenter<AuthView>() {
     }
 
     fun login() {
-        val url = "https://oauth.vk.com/authorize?" +
-                "client_id=${id}&" +
-                "display=page&" +
-                "redirect_uri=${redirectUri}&" +
-                "scope=${scope}&" +
-                "response_type=token&" +
-                "v=5.103"
-
         viewState.login(url)
     }
 

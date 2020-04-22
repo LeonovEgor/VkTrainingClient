@@ -8,6 +8,7 @@ import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
 import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
 import ru.leonov.vktrainingclient.mvp.utils.concatString
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus
+import java.util.*
 
 class UsersRepository(
     private val api: IDataSource,
@@ -24,7 +25,7 @@ class UsersRepository(
                         val user = usersApi.response[0]
                         val vkUser = VkUser(
                             user.id,
-                            concatString(user.first_name, " ", user.last_name),
+                            concatString(user.first_name, " ", user.last_name).toUpperCase(Locale.getDefault()),
                             user.bdate ?: "",
                             user.photo_200,
                             concatString(user.city?.title, ", ", user.country?.title)

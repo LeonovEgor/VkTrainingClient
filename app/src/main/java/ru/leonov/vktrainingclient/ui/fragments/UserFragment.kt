@@ -22,12 +22,11 @@ import javax.inject.Inject
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     companion object {
-        private const val VK_TOKEN = "vktoken"
         private const val VK_USER_ID = "vkuserid"
 
-        fun newInstance(token: String, userId: Int) = UserFragment().apply {
+        // Для отображения друга вместо авторизованного пользователя, при переходе с фрагметна friends
+        fun newInstance(userId: Int) = UserFragment().apply {
             arguments = Bundle().apply {
-                putString(VK_TOKEN, token)
                 putInt(VK_USER_ID, userId)
             }
         }
@@ -39,14 +38,12 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     @ProvidePresenter
     fun providePresenter() = UserPresenter(
         mainThread(),
-        arguments!![VK_TOKEN] as String,
         arguments!![VK_USER_ID] as Int).apply {
         App.instance.appComponent.inject(this)
     }
 
     @Inject
     lateinit var imageLoader: IImageLoader<ImageView>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +60,12 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     override fun clearError() {
+        tv_status.visibility = View.GONE
         tv_status.text = ""
     }
 
     override fun showError(error: String) {
+        tv_status.visibility = View.VISIBLE
         tv_status.text = error
     }
 

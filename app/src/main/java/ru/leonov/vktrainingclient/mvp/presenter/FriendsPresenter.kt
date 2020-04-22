@@ -3,6 +3,7 @@ package ru.leonov.vktrainingclient.mvp.presenter
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
 import ru.leonov.vktrainingclient.mvp.model.entity.api.base.User
 import ru.leonov.vktrainingclient.mvp.model.repository.FriendsRepository
@@ -18,10 +19,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class FriendsPresenter(
-    private val mainThreadScheduler: Scheduler,
-    private val token: String,
-    private val userId: Int
-) : MvpPresenter<FriendsView>() {
+    private val mainThreadScheduler: Scheduler) : MvpPresenter<FriendsView>() {
 
     private val fields = "photo_200, country, city"
 
@@ -30,6 +28,9 @@ class FriendsPresenter(
 
     @Inject
     lateinit var router: Router
+
+    @Inject
+    lateinit var userSession: UserSession
 
     class FriendsListPresenter : IFriendsListPresenter {
         val friends = mutableListOf<VkUser>()
@@ -55,14 +56,14 @@ class FriendsPresenter(
 
         friendsListPresenter.itemClickListener = { itemView ->
             val friend = friendsListPresenter.friends[itemView.pos]
-            router.navigateTo(Screens.UserScreen(token, friend.userId))
+            router.navigateTo(Screens.UserScreen(friend.userId))
         }
     }
 
     private fun loadUserList() {
         viewState.clearError()
 
-        friendsRepo.getFriendList(userId, fields, token)
+        friendsRepo.getFriendList(userSession.userId, fields, userSession.token)
             .observeOn(mainThreadScheduler)
             .subscribe ( { friendList ->
                     viewState.showState("Friends: ${friendList.count()}")

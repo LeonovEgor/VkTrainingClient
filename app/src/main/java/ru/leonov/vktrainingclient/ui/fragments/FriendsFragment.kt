@@ -23,26 +23,12 @@ import javax.inject.Inject
 
 class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener {
 
-    companion object {
-        private const val VK_TOKEN = "vktoken"
-        private const val VK_USER_ID = "vkuserid"
-
-        fun newInstance(token: String, userId: Int) = FriendsFragment().apply {
-            arguments = Bundle().apply {
-                putString(VK_TOKEN, token)
-                putInt(VK_USER_ID, userId)
-            }
-        }
-    }
-
     @InjectPresenter
     lateinit var presenter: FriendsPresenter
 
     @ProvidePresenter
     fun providePresenter() = FriendsPresenter(
-        mainThread(),
-        arguments!![VK_TOKEN] as String,
-        arguments!![VK_USER_ID] as Int).apply {
+        mainThread()).apply {
         App.instance.appComponent.inject(this)
     }
 
