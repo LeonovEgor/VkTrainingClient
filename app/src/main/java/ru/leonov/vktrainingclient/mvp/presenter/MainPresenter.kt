@@ -43,4 +43,8 @@ class MainPresenter() : MvpPresenter<MainView>() {
         router.navigateTo(Screens.PhotosScreen(token, userId))
     }
 
+    fun onLogout() {
+        //router.navigateTo(Screens.Login(null, null))
+    }
+
 }

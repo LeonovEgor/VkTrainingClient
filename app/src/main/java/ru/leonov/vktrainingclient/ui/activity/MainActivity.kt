@@ -3,6 +3,8 @@ package ru.leonov.vktrainingclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
@@ -15,6 +17,7 @@ import ru.leonov.vktrainingclient.ui.BackButtonListener
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import javax.inject.Inject
+
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
@@ -36,6 +39,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     @InjectPresenter
     lateinit var presenter: MainPresenter
+
+    @ProvidePresenter
+    fun providePresenter() = MainPresenter().apply {
+        App.instance.appComponent.inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,9 +70,20 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         }
     }
 
-    @ProvidePresenter
-    fun providePresenter() = MainPresenter().apply {
-        App.instance.appComponent.inject(this)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout -> {
+                presenter.onLogout()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
     }
 
     override fun onResumeFragments() {

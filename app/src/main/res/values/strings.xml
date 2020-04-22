@@ -4,4 +4,5 @@
     <string name="menu_home">home</string>
     <string name="menu_friends">friends</string>
     <string name="menu_photos">photos</string>
+    <string name="logout">logout</string>
 </resources>
