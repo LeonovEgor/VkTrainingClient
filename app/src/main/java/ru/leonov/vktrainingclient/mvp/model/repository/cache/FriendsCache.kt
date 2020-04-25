@@ -1,4 +1,4 @@
-package ru.leonov.vktrainingclient.mvp.model.repository
+package ru.leonov.vktrainingclient.mvp.model.repository.cache
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -26,11 +26,11 @@ class FriendsCache(private val database: AppDatabase) : IFriendsCache {
 
     override fun getFriendListById(userId: Int): Single<List<VkUser>> =
 
-        Single.create { emitter ->
+        Single.create<List<VkUser>> { emitter ->
             database.friendDao.getFriendListById(userId)?.let { roomVkFriendList ->
                 val vkFriendList = roomVkFriendList.map {
                     VkUser(
-                        it.authUserId,
+                        it.friendId,
                         it.name,
                         "",
                         it.photoUrl,
@@ -41,5 +41,5 @@ class FriendsCache(private val database: AppDatabase) : IFriendsCache {
             } ?: let {
                 emitter.onError(RuntimeException("No such friends in cache"))
             }
-        }
+        }.subscribeOn(Schedulers.io())
 }

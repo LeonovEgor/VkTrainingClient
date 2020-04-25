@@ -25,7 +25,7 @@ class UsersRepository(
                         val user = usersApi.response[0]
                         val vkUser = VkUser(
                             user.id,
-                            concatString(user.first_name, " ", user.last_name).toUpperCase(Locale.getDefault()),
+                            concatString(user.first_name, " ", user.last_name),
                             user.bdate ?: "",
                             user.photo_200,
                             concatString(user.city?.title, ", ", user.country?.title)

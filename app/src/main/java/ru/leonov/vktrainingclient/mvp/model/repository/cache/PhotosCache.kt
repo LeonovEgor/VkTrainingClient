@@ -1,4 +1,4 @@
-package ru.leonov.vktrainingclient.mvp.model.repository
+package ru.leonov.vktrainingclient.mvp.model.repository.cache
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -27,10 +27,7 @@ class PhotosCache(private val database: AppDatabase) : IPhotosCache {
         Single.create { emitter ->
             database.photoDao.getPhotoListById(userId)?.let { roomPhotoList ->
                 val vkPhotoList = roomPhotoList.map {
-                    VkPhoto(
-                        it.photoUrl,
-                        it.text
-                    )
+                    VkPhoto(it.photoUrl,it.text)
                 }
                 emitter.onSuccess(vkPhotoList)
             } ?: let {

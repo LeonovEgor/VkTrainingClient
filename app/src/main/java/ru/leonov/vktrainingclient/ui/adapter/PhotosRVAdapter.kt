@@ -12,7 +12,6 @@ import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.list.IPhotoListPresenter
 import ru.leonov.vktrainingclient.mvp.view.list.IPhotosItemView
 
-//TODO: Заменить на дженерик
 class PhotosRVAdapter(val presenter: IPhotoListPresenter, private val imageLoader: IImageLoader<ImageView>) : RecyclerView.Adapter<PhotosRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

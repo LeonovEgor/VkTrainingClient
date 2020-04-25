@@ -47,7 +47,6 @@ class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
     ): View? = inflater.inflate(R.layout.fragment_photos, container, false)
 
     override fun init() {
-        rv_photos.layoutManager = GridLayoutManager(context, 2)
         adapter = PhotosRVAdapter(presenter.photoListPresenter, imageLoader)
         rv_photos.adapter = adapter
     }

@@ -3,21 +3,21 @@ package ru.leonov.vktrainingclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.Observer
+import android.view.View
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_auth.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.leonov.vktrainingclient.R
-import ru.leonov.vktrainingclient.mvp.model.entity.IAuthCallback
-import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
+import ru.leonov.vktrainingclient.mvp.model.auth.IAuth
 import ru.leonov.vktrainingclient.mvp.presenter.AuthPresenter
 import ru.leonov.vktrainingclient.mvp.view.AuthView
 import ru.leonov.vktrainingclient.ui.App
-import ru.leonov.vktrainingclient.ui.auth.AndroidAuthRepo
+import ru.leonov.vktrainingclient.ui.auth.AndroidAuth
 import javax.inject.Inject
 
-class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
+class AuthActivity : MvpAppCompatActivity(), AuthView {
 
     companion object {
         private const val logout_text = "logout"
@@ -32,7 +32,7 @@ class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
     lateinit var presenter: AuthPresenter
 
     @Inject
-    lateinit var authRepo: IAuthRepo
+    lateinit var auth: IAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,21 +47,17 @@ class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
     }
 
     private fun initAuthRepo() {
-        if (authRepo is AndroidAuthRepo)
-            (authRepo as AndroidAuthRepo).setWebView(web_view)
+        if (auth is AndroidAuth)
+            (auth as AndroidAuth).setWebView(web_view)
     }
 
     @ProvidePresenter
-    fun providePresenter() = AuthPresenter().apply {
+    fun providePresenter() = AuthPresenter(AndroidSchedulers.mainThread()).apply {
         App.instance.appComponent.inject(this)
     }
 
-    override fun login(url: String) {
-        authRepo.login(url, this)
-    }
-
     override fun logout() {
-        authRepo.logout()
+        auth.logout()
     }
 
     override fun init() {
@@ -75,13 +71,5 @@ class AuthActivity : MvpAppCompatActivity(), AuthView, IAuthCallback {
 
     override fun showError(error: String) {
         tv_status.text = error
-    }
-
-    override fun onUserAuthorized(token: String, userId: Int) {
-        presenter.onUserAuthorized(token, userId)
-    }
-
-    override fun OnUserAuthorizedError(error: String) {
-        presenter.onUserAuthorizedError(error)
     }
 }

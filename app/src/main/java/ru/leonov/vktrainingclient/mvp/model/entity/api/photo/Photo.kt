@@ -7,5 +7,4 @@ data class Photo (
 	@Expose val id : Int,
 	@Expose val sizes: List<Photo>,
 	@Expose val text : String
-	//@Expose val date : Date
 )

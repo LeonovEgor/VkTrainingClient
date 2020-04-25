@@ -9,7 +9,7 @@ import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.ui.App
 import ru.leonov.vktrainingclient.ui.image.GlideImageLoader
-import ru.leonov.vktrainingclient.ui.image.ImageCache
+import ru.leonov.vktrainingclient.mvp.model.cache.image.ImageCache
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 import java.io.File
 import javax.inject.Named
@@ -37,7 +37,10 @@ class ImageModule {
     @Singleton
     @Provides
     fun imageCache(database: AppDatabase, @Named("dir") dir: File): IImageCache {
-        return ImageCache(database, dir)
+        return ImageCache(
+            database,
+            dir
+        )
     }
 
     @Singleton

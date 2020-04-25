@@ -4,21 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomCachedImage
-import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomFriend
-import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomPhoto
-import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomUser
-import ru.leonov.vktrainingclient.mvp.model.entity.room.dao.ImageDao
-import ru.leonov.vktrainingclient.mvp.model.entity.room.dao.FriendDao
-import ru.leonov.vktrainingclient.mvp.model.entity.room.dao.PhotoDao
-import ru.leonov.vktrainingclient.mvp.model.entity.room.dao.UserDao
+import ru.leonov.vktrainingclient.mvp.model.entity.room.*
+import ru.leonov.vktrainingclient.mvp.model.entity.room.dao.*
 
 @Database(
     entities = [
         RoomUser::class,
         RoomFriend::class,
         RoomCachedImage::class,
-        RoomPhoto::class],
+        RoomPhoto::class,
+        RoomSession::class],
     version = 1,
     exportSchema = false
 )
@@ -27,6 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val friendDao: FriendDao
     abstract val imageDao: ImageDao
     abstract val photoDao: PhotoDao
+    abstract val sessionDao: SessionDao
 
     companion object {
         const val DB_NAME = "database.db"

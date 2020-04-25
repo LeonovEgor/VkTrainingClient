@@ -1,4 +1,4 @@
-package ru.leonov.vktrainingclient.ui.image
+package ru.leonov.vktrainingclient.mvp.model.cache.image
 
 import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Completable
@@ -24,9 +24,10 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
         MessageDigest.getInstance(algorithm).digest(toByteArray())
             .fold("", { _, it -> "%02x".format(it) })
 
-    override fun contains(url: String): @NonNull Single<Boolean> = Single.fromCallable {
-        database.imageDao.findByUrl(url) != null
-    }.subscribeOn(Schedulers.io())
+    override fun contains(url: String): @NonNull Single<Boolean> =
+        Single.fromCallable {
+            database.imageDao.findByUrl(url) != null
+        }.subscribeOn(Schedulers.io())
 
     override fun getBytes(url: String): Maybe<ByteArray?> = Maybe.fromCallable {
         database.imageDao.findByUrl(url)?.let {
@@ -43,7 +44,7 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
 
             val fileFormat = if (url.contains(JPG)) JPG else PNG
             val imageFile = File(dir, url.md5() + fileFormat)
-
+            Timber.d("${dir} ${url.md5()} + ${fileFormat}")
             try {
                 FileOutputStream(imageFile).use { stream ->
                     stream.write(bytes)
@@ -52,11 +53,7 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
                 emitter.onError(e)
             }
             Timber.d("saveImage image saved. Try to add image info to database")
-            database.imageDao.insert(
-                RoomCachedImage(
-                    url,
-                    imageFile.path
-                )
+            database.imageDao.insert(RoomCachedImage(url,imageFile.path)
             )
             Timber.d("saveImage image info added to database")
             emitter.onComplete()

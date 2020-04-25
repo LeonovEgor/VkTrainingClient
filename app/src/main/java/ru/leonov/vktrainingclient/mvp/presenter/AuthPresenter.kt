@@ -1,15 +1,16 @@
 package ru.leonov.vktrainingclient.mvp.presenter
 
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
-import ru.leonov.vktrainingclient.mvp.model.repository.IAuthRepo
+import ru.leonov.vktrainingclient.mvp.model.repository.SessionRepository
 import ru.leonov.vktrainingclient.mvp.view.AuthView
 import ru.leonov.vktrainingclient.secretdata.VkProgramId
 import javax.inject.Inject
 
 @InjectViewState
-class AuthPresenter : MvpPresenter<AuthView>() {
+class AuthPresenter(private val mainThreadScheduler: Scheduler) : MvpPresenter<AuthView>() {
 
     private val id = VkProgramId
     private val scope = "friends,photos,wall"
@@ -25,13 +26,22 @@ class AuthPresenter : MvpPresenter<AuthView>() {
     @Inject
     lateinit var userSession: UserSession
 
+    @Inject
+    lateinit var session: SessionRepository
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
     }
 
     fun login() {
-        viewState.login(url)
+        session.getSession(url)
+            .observeOn(mainThreadScheduler)
+            .subscribe({ newSession ->
+                onUserAuthorized(newSession.token, newSession.userId)
+            }, {
+                onUserAuthorizedError(it.localizedMessage ?: "Unknown authorization error!!!")
+            })
     }
 
     fun logout() {
@@ -39,13 +49,13 @@ class AuthPresenter : MvpPresenter<AuthView>() {
         login()
     }
 
-    fun onUserAuthorized(token: String, userId: Int) {
+    private fun onUserAuthorized(token: String, userId: Int) {
         userSession.token = token
         userSession.userId = userId
         viewState.goToNextActivity(token, userId)
     }
 
-    fun onUserAuthorizedError(error: String) {
+    private fun onUserAuthorizedError(error: String) {
         userSession.token = ""
         userSession.userId = 0
         viewState.showError(error)
