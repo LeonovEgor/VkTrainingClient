@@ -1,4 +1,4 @@
-package ru.leonov.vktrainingclient.mvp.model.entity.room.cache
+package ru.leonov.vktrainingclient.mvp.model.cache
 
 import io.reactivex.rxjava3.core.Single
 import ru.leonov.vktrainingclient.mvp.model.entity.VkUser

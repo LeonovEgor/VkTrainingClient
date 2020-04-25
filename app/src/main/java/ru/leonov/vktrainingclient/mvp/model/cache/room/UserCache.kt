@@ -1,12 +1,13 @@
-package ru.leonov.vktrainingclient.mvp.model.repository.cache
+package ru.leonov.vktrainingclient.mvp.model.cache.room
 
 import io.reactivex.rxjava3.core.Single
 import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
 import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomUser
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IUserCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 
-class UserCache(private val database: AppDatabase) : IUserCache {
+class UserCache(private val database: AppDatabase) :
+    IUserCache {
 
     override fun insertOrReplace(user: VkUser) {
         val roomUser = RoomUser(

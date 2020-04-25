@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
 import ru.leonov.vktrainingclient.mvp.model.entity.VkPhoto
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IPhotosCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IPhotosCache
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 
 class PhotosRepository(

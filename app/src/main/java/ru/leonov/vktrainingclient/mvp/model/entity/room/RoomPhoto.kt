@@ -1,6 +1,5 @@
 package ru.leonov.vktrainingclient.mvp.model.entity.room
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -9,15 +8,11 @@ import androidx.room.PrimaryKey
     foreignKeys = [ForeignKey(
         entity = RoomUser::class,
         parentColumns = ["userId"],
-        childColumns = ["authUserId"],
-        onDelete = ForeignKey.CASCADE
+        childColumns = ["authUserId"]
     )]
 )
 data class RoomPhoto(
-    @ColumnInfo(index = true) val authUserId: Int,
-    val photoUrl: String,
+    @PrimaryKey val photoUrl: String,
+    val authUserId: Int,
     val text : String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-}
+)

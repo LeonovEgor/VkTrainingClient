@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import ru.leonov.vktrainingclient.mvp.model.auth.IAuth
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.ISessionCache
+import ru.leonov.vktrainingclient.mvp.model.cache.ISessionCache
 import ru.leonov.vktrainingclient.mvp.model.repository.SessionRepository
 import ru.leonov.vktrainingclient.ui.auth.AndroidAuth
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus

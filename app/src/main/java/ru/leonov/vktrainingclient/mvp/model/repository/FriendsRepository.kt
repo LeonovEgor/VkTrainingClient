@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
 import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IFriendsCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IFriendsCache
 import ru.leonov.vktrainingclient.mvp.utils.concatString
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 

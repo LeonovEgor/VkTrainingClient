@@ -7,7 +7,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IImageCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IImageCache
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.ui.network.NetworkStatus
 import timber.log.Timber

@@ -3,9 +3,9 @@ package ru.leonov.vktrainingclient.di.modules
 import dagger.Module
 import dagger.Provides
 import ru.leonov.vktrainingclient.mvp.model.api.IDataSource
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IFriendsCache
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IPhotosCache
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IFriendsCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IPhotosCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IUserCache
 import ru.leonov.vktrainingclient.mvp.model.repository.FriendsRepository
 import ru.leonov.vktrainingclient.mvp.model.repository.PhotosRepository
 import ru.leonov.vktrainingclient.mvp.model.repository.UsersRepository

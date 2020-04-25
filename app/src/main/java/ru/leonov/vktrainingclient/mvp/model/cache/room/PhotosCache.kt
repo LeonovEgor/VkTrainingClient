@@ -1,21 +1,22 @@
-package ru.leonov.vktrainingclient.mvp.model.repository.cache
+package ru.leonov.vktrainingclient.mvp.model.cache.room
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.leonov.vktrainingclient.mvp.model.entity.VkPhoto
 import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomPhoto
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IPhotosCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IPhotosCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 
-class PhotosCache(private val database: AppDatabase) : IPhotosCache {
+class PhotosCache(private val database: AppDatabase) :
+    IPhotosCache {
 
     override fun insertOrReplace(userId: Int, photoList: List<VkPhoto>): Completable =
         Completable.fromAction {
             val roomVkPhotoList = photoList.map {
                     RoomPhoto(
-                        userId,
                         it.photoUrl,
+                        userId,
                         it.text
                     )
             }

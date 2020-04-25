@@ -1,14 +1,15 @@
-package ru.leonov.vktrainingclient.mvp.model.repository.cache
+package ru.leonov.vktrainingclient.mvp.model.cache.room
 
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomSession
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.ISessionCache
+import ru.leonov.vktrainingclient.mvp.model.cache.ISessionCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 
-class SessionCache(private val database: AppDatabase) : ISessionCache {
+class SessionCache(private val database: AppDatabase) :
+    ISessionCache {
 
     override fun insertOrReplace(token: String, userId: Int): Completable =
         Completable.fromAction() {

@@ -2,15 +2,15 @@ package ru.leonov.vktrainingclient.di.modules
 
 import dagger.Module
 import dagger.Provides
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IFriendsCache
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IPhotosCache
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.ISessionCache
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IUserCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IFriendsCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IPhotosCache
+import ru.leonov.vktrainingclient.mvp.model.cache.ISessionCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IUserCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
-import ru.leonov.vktrainingclient.mvp.model.repository.cache.UserCache
-import ru.leonov.vktrainingclient.mvp.model.repository.cache.FriendsCache
-import ru.leonov.vktrainingclient.mvp.model.repository.cache.PhotosCache
-import ru.leonov.vktrainingclient.mvp.model.repository.cache.SessionCache
+import ru.leonov.vktrainingclient.mvp.model.cache.room.UserCache
+import ru.leonov.vktrainingclient.mvp.model.cache.room.FriendsCache
+import ru.leonov.vktrainingclient.mvp.model.cache.room.PhotosCache
+import ru.leonov.vktrainingclient.mvp.model.cache.room.SessionCache
 
 @Module(
     includes = [

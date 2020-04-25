@@ -4,7 +4,7 @@ package ru.leonov.vktrainingclient.di.modules
 import android.widget.ImageView
 import dagger.Module
 import dagger.Provides
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IImageCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IImageCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.ui.App

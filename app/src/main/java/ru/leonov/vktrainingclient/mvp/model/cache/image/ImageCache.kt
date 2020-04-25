@@ -5,9 +5,10 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ru.leonov.vktrainingclient.mvp.model.entity.room.cache.IImageCache
+import ru.leonov.vktrainingclient.mvp.model.cache.IImageCache
 import ru.leonov.vktrainingclient.mvp.model.entity.room.db.AppDatabase
 import ru.leonov.vktrainingclient.mvp.model.entity.room.RoomCachedImage
+import ru.leonov.vktrainingclient.mvp.utils.toMD5
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -18,11 +19,6 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
     IImageCache {
     private val JPG = ".jpg"
     private val PNG = ".png"
-
-    private fun String.md5() = hash("MD5")
-    private fun String.hash(algorithm: String) =
-        MessageDigest.getInstance(algorithm).digest(toByteArray())
-            .fold("", { _, it -> "%02x".format(it) })
 
     override fun contains(url: String): @NonNull Single<Boolean> =
         Single.fromCallable {
@@ -43,8 +39,8 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
             }
 
             val fileFormat = if (url.contains(JPG)) JPG else PNG
-            val imageFile = File(dir, url.md5() + fileFormat)
-            Timber.d("${dir} ${url.md5()} + ${fileFormat}")
+            val imageFile = File(dir, url.toMD5() + fileFormat)
+            Timber.d("$dir ${url.toMD5()} + $fileFormat")
             try {
                 FileOutputStream(imageFile).use { stream ->
                     stream.write(bytes)
