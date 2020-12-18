@@ -13,7 +13,7 @@ class PhotosRepository(
     private val networkStatus: NetworkStatus,
     private val cache: IPhotosCache
 ) {
-    private val VERSION = "5.103"
+    private val version = "5.103"
 
     fun getPhotoList(
         ownerId: Int,
@@ -23,7 +23,7 @@ class PhotosRepository(
     ): @NonNull Single<List<VkPhoto>> =
         networkStatus.isOnlineSingle().flatMap { isOnline ->
             if (isOnline) {
-                api.getPhotos(ownerId, album_id, count, token, VERSION).flatMap { photoListApi ->
+                api.getPhotos(ownerId, album_id, count, token, version).flatMap { photoListApi ->
                     val vkPhotoList = photoListApi.response.items?.map { photo ->
                         VkPhoto(
                             photo.sizes[photo.sizes.lastIndex].url,

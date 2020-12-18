@@ -1,8 +1,6 @@
 package ru.leonov.vktrainingclient.mvp.model.entity.api.base
 
 import com.google.gson.annotations.Expose
-import ru.leonov.vktrainingclient.mvp.model.entity.api.base.City
-import ru.leonov.vktrainingclient.mvp.model.entity.api.base.Country
 
 data class User (
     @Expose val id : Int,

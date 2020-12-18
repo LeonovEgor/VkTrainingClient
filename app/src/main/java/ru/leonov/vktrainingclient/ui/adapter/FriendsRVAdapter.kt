@@ -5,14 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.friend_item.view.*
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.FriendItemBinding
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.list.IFriendsListPresenter
 import ru.leonov.vktrainingclient.mvp.view.list.IFriendItemView
 
-class FriendsRVAdapter(val presenter: IFriendsListPresenter, val imageLoader: IImageLoader<ImageView>) : RecyclerView.Adapter<FriendsRVAdapter.ViewHolder>() {
+class FriendsRVAdapter(
+    val presenter: IFriendsListPresenter,
+    private val imageLoader: IImageLoader<ImageView>) :
+    RecyclerView.Adapter<FriendsRVAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.friend_item, parent, false), imageLoader)
@@ -26,22 +28,24 @@ class FriendsRVAdapter(val presenter: IFriendsListPresenter, val imageLoader: II
     }
 
     class ViewHolder(
-        override val containerView: View,
+        val containerView: View,
         private val imageLoader: IImageLoader<ImageView>
-    ): RecyclerView.ViewHolder(containerView), LayoutContainer, IFriendItemView {
+    ): RecyclerView.ViewHolder(containerView), IFriendItemView {
 
         override var pos = -1
 
-        override fun loadPhoto(url: String)  = with(containerView) {
-            imageLoader.loadInto(url, iv_photo)
+        private val binding = FriendItemBinding.bind(containerView)
+
+        override fun loadPhoto(url: String) {
+            imageLoader.loadInto(url, binding.ivPhoto)
         }
 
-        override fun setFio(fio: String) = with(containerView) {
-            tv_fio.text = fio
+        override fun setFio(fio: String) {
+            binding.tvFio.text = fio
         }
 
-        override fun setCity(city: String) = with(containerView) {
-            tv_city_country.text = city
+        override fun setCity(city: String) {
+            binding.tvCityCountry.text = city
         }
     }
 

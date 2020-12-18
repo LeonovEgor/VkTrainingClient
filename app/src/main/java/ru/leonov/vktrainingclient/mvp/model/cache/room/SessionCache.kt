@@ -12,7 +12,7 @@ class SessionCache(private val database: AppDatabase) :
     ISessionCache {
 
     override fun insertOrReplace(token: String, userId: Int): Completable =
-        Completable.fromAction() {
+        Completable.fromAction {
             database.sessionDao.insert(RoomSession(userId, token))
     }.subscribeOn(Schedulers.io())
 

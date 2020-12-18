@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread
-import kotlinx.android.synthetic.main.activity_auth.tv_status
-import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.FragmentUserBinding
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.UserPresenter
 import ru.leonov.vktrainingclient.mvp.view.UserView
@@ -22,7 +20,7 @@ import javax.inject.Inject
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     companion object {
-        private const val VK_USER_ID = "vkuserid"
+        private const val VK_USER_ID = "vk_user_id"
 
         // Для отображения друга вместо авторизованного пользователя, при переходе с фрагметна friends
         fun newInstance(userId: Int) = UserFragment().apply {
@@ -31,6 +29,9 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
             }
         }
     }
+
+    private var _binding: FragmentUserBinding? = null
+    private val binding get() = _binding!!
 
     @InjectPresenter
     lateinit var presenter: UserPresenter
@@ -53,36 +54,39 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_user, container, false)
+    ): View {
+        _binding = FragmentUserBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun init() {
 
     }
 
     override fun clearError() {
-        tv_status.visibility = View.GONE
-        tv_status.text = ""
+        binding.tvStatus.visibility = View.GONE
+        binding.tvStatus.text = ""
     }
 
     override fun showError(error: String) {
-        tv_status.visibility = View.VISIBLE
-        tv_status.text = error
+        binding.tvStatus.visibility = View.VISIBLE
+        binding.tvStatus.text = error
     }
 
     override fun setUserName(userName: String) {
-        tv_name.text = userName
+        binding.tvName.text = userName
     }
 
     override fun loadPhoto(url: String) {
-        imageLoader.loadInto(url, iv_user_image)
+        imageLoader.loadInto(url, binding.ivUserImage)
     }
 
     override fun setCity(city: String) {
-        tv_city_country.text = city
+        binding.tvCityCountry.text = city
     }
 
     override fun setBirthday(date: String) {
-        tv_bdate.text = date
+        binding.tvBdate.text = date
     }
 
     override fun backClicked() = presenter.backClicked()

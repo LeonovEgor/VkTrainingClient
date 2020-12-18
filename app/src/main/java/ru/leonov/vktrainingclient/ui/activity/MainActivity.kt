@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.ActivityMainBinding
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.presenter.MainPresenter
 import ru.leonov.vktrainingclient.mvp.view.MainView
@@ -39,6 +39,8 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     @InjectPresenter
     lateinit var presenter: MainPresenter
 
+    private lateinit var binding: ActivityMainBinding
+
     @ProvidePresenter
     fun providePresenter() = MainPresenter().apply {
         App.instance.appComponent.inject(this)
@@ -46,7 +48,10 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         App.instance.appComponent.inject(this)
 
@@ -54,7 +59,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     }
 
     private fun navigationViewInit() {
-        bottom_navigation.setOnNavigationItemSelectedListener {item ->
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {item ->
             when (item.itemId) {
                 R.id.action_main -> { presenter.onHomeClick() }
                 R.id.action_friends -> { presenter.onFriendsClick() }

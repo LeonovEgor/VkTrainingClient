@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread
-import kotlinx.android.synthetic.main.activity_auth.tv_status
-import kotlinx.android.synthetic.main.fragment_friends.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.FragmentFriendsBinding
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.FriendsPresenter
 import ru.leonov.vktrainingclient.mvp.view.FriendsView
@@ -23,12 +21,16 @@ import javax.inject.Inject
 
 class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener {
 
+    private var _binding: FragmentFriendsBinding? = null
+    private val binding get() = _binding!!
+
     @InjectPresenter
     lateinit var presenter: FriendsPresenter
 
     @ProvidePresenter
     fun providePresenter() = FriendsPresenter(
-        mainThread()).apply {
+        mainThread()
+    ).apply {
         App.instance.appComponent.inject(this)
     }
 
@@ -43,14 +45,23 @@ class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener 
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_friends, container, false)
+    ): View {
+        _binding = FragmentFriendsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun init() {
-        rv_friends.layoutManager = LinearLayoutManager(context)
+        binding.rvFriends.layoutManager = LinearLayoutManager(context)
         adapter = FriendsRVAdapter(presenter.friendsListPresenter, imageLoader)
-        rv_friends.adapter = adapter
+        binding.rvFriends.adapter = adapter
     }
 
     override fun updateList() {
@@ -58,15 +69,15 @@ class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener 
     }
 
     override fun clearError() {
-        tv_status.text = ""
+        binding.tvStatus.text = ""
     }
 
     override fun showError(error: String) {
-        tv_status.text = error
+        binding.tvStatus.text = error
     }
 
     override fun showState(state: String) {
-        tv_status.text = state
+        binding.tvStatus.text = state
     }
 
     override fun backClicked() = presenter.backClicked()

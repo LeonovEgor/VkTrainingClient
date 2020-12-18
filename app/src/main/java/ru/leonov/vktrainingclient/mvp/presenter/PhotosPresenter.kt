@@ -5,7 +5,6 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.entity.VkPhoto
-import ru.leonov.vktrainingclient.mvp.model.entity.api.photo.Photo
 import ru.leonov.vktrainingclient.mvp.model.repository.PhotosRepository
 import ru.leonov.vktrainingclient.mvp.presenter.list.IPhotoListPresenter
 import ru.leonov.vktrainingclient.mvp.view.PhotosView

@@ -13,12 +13,11 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.security.MessageDigest
 
 class ImageCache(private val database: AppDatabase, private val dir: File) :
     IImageCache {
-    private val JPG = ".jpg"
-    private val PNG = ".png"
+    private val jpg = ".jpg"
+    private val png = ".png"
 
     override fun contains(url: String): @NonNull Single<Boolean> =
         Single.fromCallable {
@@ -38,7 +37,7 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
                 return@create
             }
 
-            val fileFormat = if (url.contains(JPG)) JPG else PNG
+            val fileFormat = if (url.contains(jpg)) jpg else png
             val imageFile = File(dir, url.toMD5() + fileFormat)
             Timber.d("$dir ${url.toMD5()} + $fileFormat")
             try {

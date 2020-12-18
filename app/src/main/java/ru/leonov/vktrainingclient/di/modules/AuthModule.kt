@@ -38,7 +38,7 @@ class AuthModule {
 
     @Provides
     @Singleton
-    fun AuthRepository(
+    fun authRepository(
         auth: IAuth,
         networkStatus: NetworkStatus,
         cache: ISessionCache

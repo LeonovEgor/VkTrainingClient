@@ -30,16 +30,12 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var instance: AppDatabase? = null
 
-        fun getInstance(): AppDatabase = instance
-            ?: throw RuntimeException("Database has not been created. Please call create(context)")
-
         fun create(context: Context) = instance
             ?: let {
                 instance = Room.databaseBuilder(
                     context,
                     AppDatabase::class.java, DB_NAME
                 )
-                    //.addMigrations(MIGRATION_1_2)
                     .build()
             }
     }

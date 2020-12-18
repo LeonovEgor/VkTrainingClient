@@ -5,11 +5,8 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import ru.leonov.vktrainingclient.mvp.model.entity.UserSession
 import ru.leonov.vktrainingclient.mvp.model.entity.VkUser
-import ru.leonov.vktrainingclient.mvp.model.entity.api.base.User
 import ru.leonov.vktrainingclient.mvp.model.repository.FriendsRepository
-import ru.leonov.vktrainingclient.mvp.model.repository.UsersRepository
 import ru.leonov.vktrainingclient.mvp.presenter.list.IFriendsListPresenter
-import ru.leonov.vktrainingclient.mvp.utils.concatString
 import ru.leonov.vktrainingclient.mvp.view.FriendsView
 import ru.leonov.vktrainingclient.mvp.view.list.IFriendItemView
 import ru.leonov.vktrainingclient.navigation.Screens

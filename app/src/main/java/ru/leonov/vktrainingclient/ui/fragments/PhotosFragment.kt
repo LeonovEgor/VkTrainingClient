@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.fragment_photos.*
 import moxy.MvpAppCompatFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.FragmentPhotosBinding
 import ru.leonov.vktrainingclient.mvp.model.image.IImageLoader
 import ru.leonov.vktrainingclient.mvp.presenter.PhotosPresenter
 import ru.leonov.vktrainingclient.mvp.view.PhotosView
@@ -21,6 +19,9 @@ import ru.leonov.vktrainingclient.ui.adapter.PhotosRVAdapter
 import javax.inject.Inject
 
 class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
+
+    private var _binding: FragmentPhotosBinding? = null
+    private val binding get() = _binding!!
 
     @InjectPresenter
     lateinit var presenter: PhotosPresenter
@@ -44,11 +45,19 @@ class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_photos, container, false)
+    ): View {
+        _binding = FragmentPhotosBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun init() {
         adapter = PhotosRVAdapter(presenter.photoListPresenter, imageLoader)
-        rv_photos.adapter = adapter
+        binding.rvPhotos.adapter = adapter
     }
 
     override fun updateList() {
@@ -57,15 +66,15 @@ class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
 
 
     override fun clearError() {
-        tv_status.text = ""
+        binding.tvStatus.text = ""
     }
 
     override fun showError(error: String) {
-        tv_status.text = error
+        binding.tvStatus.text = error
     }
 
     override fun showState(state: String) {
-        tv_status.text = state
+        binding.tvStatus.text = state
     }
 
     override fun backClicked() = presenter.backClicked()

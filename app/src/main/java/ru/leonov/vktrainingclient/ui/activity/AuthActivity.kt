@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_auth.*
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.leonov.vktrainingclient.R
+import ru.leonov.vktrainingclient.databinding.ActivityAuthBinding
 import ru.leonov.vktrainingclient.mvp.model.auth.IAuth
 import ru.leonov.vktrainingclient.mvp.presenter.AuthPresenter
 import ru.leonov.vktrainingclient.mvp.view.AuthView
@@ -27,6 +26,8 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
         }
     }
 
+    private lateinit var binding: ActivityAuthBinding
+
     @InjectPresenter
     lateinit var presenter: AuthPresenter
 
@@ -35,11 +36,18 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
+
+        binding = ActivityAuthBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         App.instance.appComponent.inject(this)
-        initAuthRepo()
 
+        initAuthRepo()
+        logInOut()
+    }
+
+    private fun logInOut() {
         val isLogout = intent.getBooleanExtra(logout_text, false)
         if (isLogout) presenter.logout()
         else presenter.login()
@@ -47,7 +55,7 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
 
     private fun initAuthRepo() {
         if (auth is AndroidAuth)
-            (auth as AndroidAuth).setWebView(web_view)
+            (auth as AndroidAuth).setWebView(binding.webView)
     }
 
     @ProvidePresenter
@@ -69,7 +77,7 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
     }
 
     override fun showError(error: String) {
-        tv_status.text = error
+        binding.tvStatus.text = error
     }
 
 }

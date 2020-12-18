@@ -22,7 +22,7 @@ interface SessionDao {
 
     //region Update
 
-    @Update()
+    @Update
     fun update(session: RoomSession)
 
     //endregion Update
