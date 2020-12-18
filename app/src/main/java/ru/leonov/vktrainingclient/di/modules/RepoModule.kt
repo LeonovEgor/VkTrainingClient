@@ -51,4 +51,5 @@ class RepoModule {
     ): PhotosRepository {
         return PhotosRepository(api, networkStatus, cache)
     }
+
 }

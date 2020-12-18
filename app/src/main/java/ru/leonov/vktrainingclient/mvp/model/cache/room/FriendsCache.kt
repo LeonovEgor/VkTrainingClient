@@ -46,4 +46,5 @@ class FriendsCache(private val database: AppDatabase) :
                 emitter.onError(RuntimeException("No such friends in cache"))
             }
         }.subscribeOn(Schedulers.io())
+
 }

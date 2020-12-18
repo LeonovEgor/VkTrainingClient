@@ -86,4 +86,5 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     override fun backClicked() = presenter.backClicked()
+
 }

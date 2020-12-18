@@ -11,4 +11,5 @@ class AppModule(val app: App) {
     fun app(): App {
         return app
     }
+
 }

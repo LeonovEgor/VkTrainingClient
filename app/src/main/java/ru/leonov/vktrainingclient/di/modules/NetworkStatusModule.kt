@@ -14,4 +14,5 @@ class NetworkStatusModule {
     fun networkStatus(app: App): NetworkStatus {
         return NetworkStatus(app)
     }
+
 }

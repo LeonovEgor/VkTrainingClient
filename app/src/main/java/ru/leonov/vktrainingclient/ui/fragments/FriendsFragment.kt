@@ -70,4 +70,5 @@ class FriendsFragment : MvpAppCompatFragment(), FriendsView, BackButtonListener 
     }
 
     override fun backClicked() = presenter.backClicked()
+
 }

@@ -67,4 +67,5 @@ class AndroidAuth(private val redirectUri: String) : IAuth {
         CookieManager.getInstance().removeAllCookies(null)
         CookieManager.getInstance().flush()
     }
+
 }

@@ -25,4 +25,5 @@ class SessionCache(private val database: AppDatabase) :
                 emitter.onError(RuntimeException("No such session in cache"))
             }
         }.subscribeOn(Schedulers.io())
+
 }

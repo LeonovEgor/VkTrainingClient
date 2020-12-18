@@ -67,4 +67,5 @@ class PhotosPresenter(private val mainThreadScheduler: Scheduler) : MvpPresenter
         router.exit()
         return true
     }
+
 }

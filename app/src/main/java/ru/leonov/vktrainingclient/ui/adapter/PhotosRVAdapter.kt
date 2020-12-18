@@ -35,4 +35,5 @@ class PhotosRVAdapter(val presenter: IPhotoListPresenter, private val imageLoade
             imageLoader.loadInto(url, iv_photo)
         }
     }
+
 }

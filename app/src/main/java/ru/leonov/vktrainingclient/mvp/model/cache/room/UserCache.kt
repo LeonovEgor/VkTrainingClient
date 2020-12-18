@@ -37,4 +37,5 @@ class UserCache(private val database: AppDatabase) :
                 emitter.onError(RuntimeException("No such user in cache"))
             }
         }
+
 }

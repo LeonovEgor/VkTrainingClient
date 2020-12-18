@@ -44,4 +44,5 @@ class FriendsRVAdapter(val presenter: IFriendsListPresenter, val imageLoader: II
             tv_city_country.text = city
         }
     }
+
 }

@@ -69,4 +69,5 @@ class PhotosFragment : MvpAppCompatFragment(), PhotosView, BackButtonListener {
     }
 
     override fun backClicked() = presenter.backClicked()
+
 }

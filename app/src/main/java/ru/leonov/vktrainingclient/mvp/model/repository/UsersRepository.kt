@@ -36,4 +36,5 @@ class UsersRepository(
                 cache.getUserById(usersId)
             }
         }.subscribeOn(Schedulers.io())
+
 }

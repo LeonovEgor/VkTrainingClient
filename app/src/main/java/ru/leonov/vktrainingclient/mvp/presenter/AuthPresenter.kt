@@ -60,4 +60,5 @@ class AuthPresenter(private val mainThreadScheduler: Scheduler) : MvpPresenter<A
         userSession.userId = 0
         viewState.showError(error)
     }
+
 }

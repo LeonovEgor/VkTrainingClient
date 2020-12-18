@@ -54,4 +54,5 @@ class ImageCache(private val database: AppDatabase, private val dir: File) :
             Timber.d("saveImage image info added to database")
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
+
 }

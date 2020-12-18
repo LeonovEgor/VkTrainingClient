@@ -35,4 +35,5 @@ class PhotosCache(private val database: AppDatabase) :
                 emitter.onError(RuntimeException("No such photos in cache"))
             }
         }
+
 }

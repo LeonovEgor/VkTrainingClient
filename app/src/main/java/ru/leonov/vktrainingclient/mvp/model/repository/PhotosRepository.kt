@@ -36,4 +36,5 @@ class PhotosRepository(
                 cache.getPhotoListById(ownerId)
             }
         }.subscribeOn(Schedulers.io())
+
 }

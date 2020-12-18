@@ -3,7 +3,6 @@ package ru.leonov.vktrainingclient.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_auth.*
 import moxy.MvpAppCompatActivity
@@ -72,4 +71,5 @@ class AuthActivity : MvpAppCompatActivity(), AuthView {
     override fun showError(error: String) {
         tv_status.text = error
     }
+
 }
