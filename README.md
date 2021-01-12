@@ -17,5 +17,5 @@ VK Training Client
 - RxJava3
 - Запрос данных из сети retrofit, JSON
 - кэширование данных Room, Sqlite
-- Matherial Design
+- Material Design
 - Отображение картинок Glide
